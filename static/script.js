@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Populate departure dates and package options
+  // Populate departure dates and package options directly from JSON file and fixed list
   populateDepartureDates();
   populatePackages();
   populateSchedule();
@@ -14,13 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Fetch available trips to populate departure date options.
+// Fetch available trips directly from the JSON file located in the parent directory
 function populateDepartureDates() {
-  fetch("/api/trips")
+  fetch("../trips.json")
     .then((response) => response.json())
     .then((data) => {
       const departureSelect = document.getElementById("departure-date");
-      // Clear current options except the default one.
       departureSelect.innerHTML =
         '<option value="">Select a departure date</option>';
       data.trips.forEach((trip) => {
@@ -33,9 +32,8 @@ function populateDepartureDates() {
     .catch((err) => console.error(err));
 }
 
-// Populate package options
+// Populate package options from fixed list
 function populatePackages() {
-  // Fixed packages list matching the pricing endpoint
   const packages = [
     { id: "luxury_cabin", name: "Luxury Cabins" },
     { id: "economy_shuttle", name: "Economy Shuttles" },
@@ -43,10 +41,8 @@ function populatePackages() {
   ];
 
   const packageSelect = document.getElementById("package-select");
-  // Clear current options except the default one.
   packageSelect.innerHTML =
     '<option value="">Select a package</option>';
-
   packages.forEach((pack) => {
     const option = document.createElement("option");
     option.value = pack.id;
@@ -55,9 +51,9 @@ function populatePackages() {
   });
 }
 
-// Populate schedule section with available trips.
+// Populate schedule section with available trips from the JSON file
 function populateSchedule() {
-  fetch("/api/trips")
+  fetch("../trips.json")
     .then((response) => response.json())
     .then((data) => {
       const scheduleCards = document.getElementById("schedule-cards");
@@ -84,7 +80,6 @@ function displayTravelTips() {
     "Remember to capture the beauty of space and Dubai's elegance.",
     "Stay curious and explore new horizons.",
   ];
-
   const tipsList = document.getElementById("tips-list");
   tipsList.innerHTML = "";
   tips.forEach((tip) => {
@@ -116,29 +111,20 @@ function handleBooking() {
 
 // Starts the countdown timer based on the provided target date.
 function startCountdown(targetDate) {
-  // Clear any existing timer intervals.
   if (window.countdownTimer) {
     clearInterval(window.countdownTimer);
   }
   window.countdownTimer = setInterval(() => {
     const now = new Date().getTime();
     const distance = targetDate.getTime() - now;
-
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
     document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-    document.getElementById("hours").innerText =
-      hours < 10 ? "0" + hours : hours;
-    document.getElementById("minutes").innerText =
-      minutes < 10 ? "0" + minutes : minutes;
-    document.getElementById("seconds").innerText =
-      seconds < 10 ? "0" + seconds : seconds;
-
+    document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+    document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+    document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
     if (distance < 0) {
       clearInterval(window.countdownTimer);
       document.getElementById("countdown").innerText = "DEPARTED";
@@ -146,24 +132,18 @@ function startCountdown(targetDate) {
   }, 1000);
 }
 
-// Generate a PDF ticket that resembles an air travel boarding pass.
+// Generate a PDF ticket resembling an air travel boarding pass.
 function generateTicketPDF(userName, departureDate, selectedPackage) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: "landscape" });
-
-  // Styling for boarding pass feel
   doc.setFillColor(20, 20, 20);
   doc.rect(10, 10, 280, 80, "F");
-
   doc.setTextColor(212, 175, 55);
   doc.setFontSize(28);
   doc.text("BOARDING PASS", 20, 30);
-
   doc.setFontSize(16);
   doc.text(`Passenger: ${userName}`, 20, 45);
   doc.text(`Departure: ${departureDate}`, 20, 60);
-
-  // Format package name for display.
   let packageName = "";
   switch (selectedPackage) {
     case "luxury_cabin":
@@ -179,18 +159,12 @@ function generateTicketPDF(userName, departureDate, selectedPackage) {
       packageName = selectedPackage;
   }
   doc.text(`Package: ${packageName}`, 20, 75);
-
-  // Add design lines for style
   doc.setDrawColor(212, 175, 55);
   doc.line(150, 10, 150, 90);
-
-  // Add additional flight details on the right side
   doc.setFontSize(14);
   doc.text("Dubai to the Stars", 160, 30);
   doc.text("Gate: A12", 160, 45);
   doc.text("Seat: 21B", 160, 60);
   doc.text("Boarding Time: 07:45", 160, 75);
-
-  // Open the PDF in a new window
   doc.output("dataurlnewwindow");
 }
