@@ -1,95 +1,101 @@
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List
+import json
+import uuid
+import os
 
 app = FastAPI(title="Dubai to the Stars API")
 
-# Enable CORS for cross-origin requests
+# Enable CORS to allow frontend access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount the static directory to serve HTML, CSS, and JS files
+# Mount the static directory to serve the frontend files (HTML, CSS, JS)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
-# Pydantic models for request/response
+# File paths for simulated database
+TRIPS_FILE = "trips.json"
+BOOKINGS_FILE = "bookings.json"
+ACCOMMODATIONS_FILE = "accommodations.json"
+
+# Data Models
 class Trip(BaseModel):
     id: int
     destination: str
-    trip_date: str
-    available_seats: int
+    departure_time: str  # ISO formatted datetime string
     price: float
+    available_seats: int
 
 class Booking(BaseModel):
-    id: Optional[int]
+    booking_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     trip_id: int
-    user_id: int
-    status: str = Field(default="Pending")
+    travel_date: str  # ISO formatted date string
+    passengers: int
 
-class Accommodation(BaseModel):
-    id: int
-    name: str
-    description: str
-    price_per_night: float
+# Utility functions to read/write JSON files
+def read_json(filename):
+    if not os.path.exists(filename):
+        return []
+    with open(filename, "r", encoding="utf-8") as f:
+        return json.load(f)
 
-# Simulated in-memory database
-trips_db = [
-    Trip(id=1, destination="International Space Station", trip_date="2025-04-15", available_seats=10, price=500000.0),
-    Trip(id=2, destination="Moon Base", trip_date="2025-05-22", available_seats=5, price=750000.0),
-    Trip(id=3, destination="Mars Colony", trip_date="2025-06-10", available_seats=3, price=1000000.0),
-]
+def write_json(filename, data):
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
 
-bookings_db = []  # List to store bookings
+# API Endpoints
 
 @app.get("/api/trips", response_model=List[Trip])
-async def get_trips():
-    return trips_db
-
-@app.get("/api/trip/{trip_id}", response_model=Trip)
-async def get_trip(trip_id: int):
-    trip = next((t for t in trips_db if t.id == trip_id), None)
-    if trip is None:
-        raise HTTPException(status_code=404, detail="Trip not found")
-    return trip
-
-@app.post("/api/bookings", response_model=Booking)
-async def create_booking(booking: Booking):
-    trip = next((t for t in trips_db if t.id == booking.trip_id), None)
-    if trip is None:
-        raise HTTPException(status_code=404, detail="Trip not found")
-    if trip.available_seats <= 0:
-        raise HTTPException(status_code=400, detail="No available seats")
-    trip.available_seats -= 1
-    booking.id = len(bookings_db) + 1
-    bookings_db.append(booking)
-    return booking
+def get_trips():
+    trips = read_json(TRIPS_FILE)
+    return trips
 
 @app.get("/api/bookings", response_model=List[Booking])
-async def get_bookings():
-    return bookings_db
+def get_bookings():
+    bookings = read_json(BOOKINGS_FILE)
+    return bookings
 
-@app.get("/api/pricing", response_model=List[Trip])
-async def get_pricing():
-    return trips_db
+@app.post("/api/bookings", response_model=Booking)
+def create_booking(booking: Booking):
+    trips = read_json(TRIPS_FILE)
+    # Validate trip exists and seats are available
+    selected_trip = next((trip for trip in trips if trip["id"] == booking.trip_id), None)
+    if not selected_trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    if booking.passengers > selected_trip["available_seats"]:
+        raise HTTPException(status_code=400, detail="Not enough available seats")
+    
+    # Deduct booked seats from the trip's available seats
+    selected_trip["available_seats"] -= booking.passengers
+    # Save updated trips data
+    write_json(TRIPS_FILE, trips)
 
-@app.get("/api/schedules", response_model=List[Trip])
-async def get_schedules():
-    return trips_db
+    # Append the booking to bookings file
+    bookings = read_json(BOOKINGS_FILE)
+    bookings.append(booking.dict())
+    write_json(BOOKINGS_FILE, bookings)
 
-@app.get("/api/accommodations", response_model=List[Accommodation])
-async def get_accommodations():
-    accommodations = [
-        Accommodation(id=1, name="Orbital Suite", description="Luxury suite with Earth view", price_per_night=20000.0),
-        Accommodation(id=2, name="Zero Gravity Pod", description="Experience true weightlessness", price_per_night=15000.0),
-    ]
+    return booking
+
+@app.get("/api/pricing")
+def get_pricing():
+    trips = read_json(TRIPS_FILE)
+    pricing_info = [{"trip_id": trip["id"], "destination": trip["destination"], "price": trip["price"]} for trip in trips]
+    return pricing_info
+
+# Optional endpoint: accommodations (if needed for dynamic recommendations)
+@app.get("/api/accommodations")
+def get_accommodations():
+    accommodations = read_json(ACCOMMODATIONS_FILE)
     return accommodations
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

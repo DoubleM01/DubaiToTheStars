@@ -1,82 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dubai to the Stars is a futuristic space travel booking platform inspired by Dubai culture. Book and manage your space station trips, check schedules, compare prices, and find accommodations in space.">
   <title>Dubai to the Stars</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Navigation Bar -->
   <header>
-    <h1>Dubai to the Stars</h1>
     <nav>
+      <h1>Dubai to the Stars</h1>
       <ul>
-        <li><a href="#booking">Book Your Trip</a></li>
-        <li><a href="#schedule">Trip Schedules</a></li>
-        <li><a href="#pricing">Pricing &amp; Packages</a></li>
+        <li><a href="#booking">Book a Trip</a></li>
+        <li><a href="#schedule">Schedule</a></li>
         <li><a href="#dashboard">Dashboard</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <h2>Travel Beyond the Horizon</h2>
+      <p>Experience the fusion of futuristic space travel and dazzling Dubai culture.</p>
+      <a href="#booking" class="hero-button">Book Now</a>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
   <section id="booking">
-    <h2>Book Your Space Trip</h2>
-    <form id="booking-form">
-      <label for="trip-date">Select Trip Date:</label>
-      <input type="date" id="trip-date" name="trip_date" required />
-
-      <label for="destination">Destination:</label>
-      <select id="destination" name="destination" required>
-        <option value="ISS">International Space Station</option>
-        <option value="MoonBase">Moon Base</option>
-        <option value="MarsColony">Mars Colony</option>
-      </select>
-
-      <button type="submit">Check Availability</button>
+    <h2>Book Your Space Journey</h2>
+    <form id="bookingForm">
+      <div class="form-group">
+        <label for="trip">Choose Trip:</label>
+        <select id="trip" name="trip" required>
+          <!-- Options will be loaded dynamically -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="travelDate">Travel Date:</label>
+        <input type="date" id="travelDate" name="travelDate" required>
+      </div>
+      <div class="form-group">
+        <label for="passengers">Number of Passengers:</label>
+        <input type="number" id="passengers" name="passengers" min="1" max="10" required>
+      </div>
+      <button type="submit">Confirm Booking</button>
     </form>
-    <div id="availability"></div>
   </section>
 
+  <!-- Schedule Section -->
   <section id="schedule">
-    <h2>Launch Schedules</h2>
-    <div id="schedule-list">
-      <!-- Real-time schedule updates will be displayed here -->
+    <h2>Upcoming Launch Schedules</h2>
+    <div id="schedules">
+      <!-- Schedule cards will be injected here by JS -->
     </div>
   </section>
 
-  <section id="pricing">
-    <h2>Pricing &amp; Packages</h2>
-    <div id="pricing-details">
-      <!-- Pricing details and interactive UI will be rendered here -->
-    </div>
-  </section>
-
+  <!-- Dashboard Section -->
   <section id="dashboard">
-    <h2>User Dashboard</h2>
-    <div id="dashboard-content">
-      <div class="countdown-timer">
-        <p>
-          Next Launch In:
-          <span id="launch-timer">00:00:00</span>
-        </p>
+    <h2>Your Dashboard</h2>
+    <div class="dashboard-cards">
+      <div class="card">
+        <h3>Launch Countdown</h3>
+        <div id="countdown">00:00:00</div>
       </div>
-      <div class="travel-tips">
-        <h3>AI Travel Tips</h3>
-        <p id="travel-tips-content">Loading tips...</p>
-      </div>
-      <div class="bookings">
+      <div class="card">
         <h3>Your Bookings</h3>
-        <ul id="bookings-list">
-          <!-- User bookings will be populated here -->
+        <ul id="userBookings">
+          <!-- User bookings loaded dynamically -->
         </ul>
       </div>
+      <div class="card">
+        <h3>AI Travel Tips</h3>
+        <p id="travelTips">Loading travel tips...</p>
+      </div>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 Dubai to the Stars. All rights reserved.</p>
+    <p>&copy; 2025 Dubai to the Stars. Experience Beauty Beyond Earth.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

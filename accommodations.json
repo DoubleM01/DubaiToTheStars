@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Celestial Suites",
+    "description": "Luxury suites with Earthrise views and zero gravity lounges.",
+    "price_per_night": 10000
+  },
+  {
+    "id": 2,
+    "name": "Lunar Lofts",
+    "description": "Modern accommodation near the Moon's orbit station.",
+    "price_per_night": 8500
+  }
+]

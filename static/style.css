@@ -1,0 +1,207 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  line-height: 1.6;
+}
+
+/* Navigation */
+header {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav h1 {
+  font-size: 2rem;
+  color: #FFD700; /* Gold hint */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+}
+
+nav ul li {
+  margin-left: 2rem;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #FFD700;
+}
+
+/* Hero Section */
+#hero {
+  height: 100vh;
+  background: url('https://via.placeholder.com/1920x1080?text=Dubai+Skyline+in+Space') no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  margin-top: 80px;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.hero-content h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-button {
+  padding: 1rem 2rem;
+  background: #FFD700;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.hero-button:hover {
+  background: #FFC300;
+}
+
+/* Booking Section */
+#booking {
+  padding: 4rem 2rem;
+  background: #111;
+}
+
+#booking h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Schedule Section */
+#schedule {
+  padding: 4rem 2rem;
+  background: #222;
+}
+
+#schedule h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+#schedules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.schedule-card {
+  background: #333;
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 300px;
+  transition: transform 0.3s;
+}
+
+.schedule-card:hover {
+  transform: scale(1.05);
+}
+
+/* Dashboard Section */
+#dashboard {
+  padding: 4rem 2rem;
+  background: #111;
+}
+
+#dashboard h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.card {
+  background: #222;
+  padding: 1.5rem;
+  width: 300px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#countdown {
+  font-size: 2rem;
+  margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #000;
+  border-top: 1px solid #333;
+  margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media(max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .dashboard-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}
