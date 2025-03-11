@@ -42,19 +42,19 @@ def get_bookings():
 
 @app.get("/api/pricing")
 def get_pricing():
-    # Sample pricing and package details
+    # Fixed prices in AED for each package
     pricing = {
         "luxury_cabin": {
-            "price": 5000,
-            "description": "Premium comfort with exclusive services."
+            "price": 15000,
+            "description": "Experience premium comfort in exclusive Luxury Cabins."
         },
         "economy_shuttle": {
-            "price": 1500,
-            "description": "Affordable travel with all essential amenities."
+            "price": 3000,
+            "description": "Enjoy an affordable ride with our Economy Shuttles."
         },
         "vip_zero_gravity": {
-            "price": 10000,
-            "description": "Exclusive zero-gravity experience with personalized service."
+            "price": 20000,
+            "description": "Indulge in a unique VIP Zero-Gravity Experience."
         }
     }
     return pricing
@@ -66,10 +66,9 @@ def get_accommodations():
         raise HTTPException(status_code=404, detail="Accommodations data not found")
     return accommodations
 
-# For real-time update simulation (e.g., countdown timer, schedule updates)
+# For real-time update simulation
 @app.get("/api/updates")
 def get_updates():
-    # This endpoint could be enhanced to push real time updates. For now, it returns a simple message.
     return {"message": "Real-time updates will be provided here."}
 
 if __name__ == "__main__":
