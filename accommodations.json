@@ -1,14 +1,14 @@
 [
-  {
-    "id": 1,
-    "name": "Celestial Suites",
-    "description": "Luxury suites with Earthrise views and zero gravity lounges.",
-    "price_per_night": 10000
-  },
-  {
-    "id": 2,
-    "name": "Lunar Lofts",
-    "description": "Modern accommodation near the Moon's orbit station.",
-    "price_per_night": 8500
-  }
+    {
+        "id": 1,
+        "name": "Celestial Suites",
+        "location": "Lunar Base",
+        "price": "$1,000 per night"
+    },
+    {
+        "id": 2,
+        "name": "Mars Habitat",
+        "location": "Mars Colony",
+        "price": "$1,500 per night"
+    }
 ]

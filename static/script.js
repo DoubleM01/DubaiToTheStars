@@ -1,126 +1,96 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  // Helper function to fetch JSON data from a given URL
-  async function fetchData(url, method = "GET", body = null) {
-    const options = { method, headers: { "Content-Type": "application/json" } };
-    if (body) options.body = JSON.stringify(body);
-    const response = await fetch(url, options);
-    return response.json();
-  }
+// Simulated API endpoints
+const API_BASE = '/api';
 
-  // Load trips for the booking select
-  async function loadTrips() {
-    try {
-      const trips = await fetchData("/api/trips");
-      const tripSelect = document.getElementById("trip");
-      trips.forEach(trip => {
-        const option = document.createElement("option");
-        option.value = trip.id;
-        option.textContent = `${trip.destination} - ${new Date(trip.departure_time).toLocaleString()} - $${trip.price}`;
-        tripSelect.appendChild(option);
-      });
-      // Also populate schedule cards
-      const schedulesContainer = document.getElementById("schedules");
-      trips.forEach(trip => {
-        const card = document.createElement("div");
-        card.className = "schedule-card";
-        card.innerHTML = `
-          <h3>${trip.destination}</h3>
-          <p>Departure: ${new Date(trip.departure_time).toLocaleString()}</p>
-          <p>Price: $${trip.price}</p>
-          <p>Available Seats: ${trip.available_seats}</p>
-        `;
-        schedulesContainer.appendChild(card);
-      });
-    } catch (err) {
-      console.error("Error loading trips", err);
-    }
-  }
+// Sample AI-based travel tips array
+const travelTips = [
+  "Pack light but smart – space suits can be bulky!",
+  "Don’t forget to hydrate; space travel can dehydrate you fast.",
+  "Experience the beauty of the cosmos – look for constellations.",
+  "Keep your travel documents in a secure, anti-gravity safe."
+];
 
-  // Booking form submission
-  document.getElementById("bookingForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const tripId = document.getElementById("trip").value;
-    const travelDate = document.getElementById("travelDate").value;
-    const passengers = document.getElementById("passengers").value;
-    
-    try {
-      const bookingResponse = await fetchData("/api/bookings", "POST", {
-        trip_id: tripId,
-        travel_date: travelDate,
-        passengers: Number(passengers)
-      });
-      alert("Booking confirmed! Your booking reference: " + bookingResponse.booking_id);
-      loadBookings(); // refresh dashboard bookings
-    } catch (err) {
-      console.error("Booking failed", err);
-      alert("Failed to book trip. Please try again.");
+// Function to fetch trips data and populate schedule cards
+async function loadTrips() {
+  try {
+    const response = await fetch(`${API_BASE}/trips`);
+    const trips = await response.json();
+    const scheduleContainer = document.querySelector('.schedule-cards');
+    scheduleContainer.innerHTML = '';
+    trips.forEach(trip => {
+      const card = document.createElement('div');
+      card.className = 'schedule-card';
+      card.innerHTML = `
+        <h3>${trip.destination} Trip</h3>
+        <p>Date: ${trip.date}</p>
+        <p>Price: ${trip.price}</p>
+      `;
+      scheduleContainer.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error fetching trips data', error);
+  }
+}
+
+// Function to simulate countdown timer for the next trip
+function startCountdown(endTime) {
+  const timerElement = document.getElementById('timer');
+  const countdown = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = endTime - now;
+    if (distance < 0) {
+      clearInterval(countdown);
+      timerElement.innerHTML = "Trip Started!";
+      return;
     }
+    const days = Math.floor(distance/(1000*60*60*24));
+    const hours = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60))/(1000*60));
+    const seconds = Math.floor((distance % (1000*60))/1000);
+    timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+}
+
+// Function to display travel tips
+function displayTravelTips() {
+  const tipsList = document.getElementById('tips-list');
+  travelTips.forEach(tip => {
+    const li = document.createElement('li');
+    li.textContent = tip;
+    tipsList.appendChild(li);
   });
+}
 
-  // Load user bookings to dashboard
-  async function loadBookings() {
-    try {
-      const bookings = await fetchData("/api/bookings");
-      const bookingsContainer = document.getElementById("userBookings");
-      bookingsContainer.innerHTML = "";
-      bookings.forEach(booking => {
-        const li = document.createElement("li");
-        li.textContent = `Booking ${booking.booking_id} for Trip ${booking.trip_id} on ${new Date(booking.travel_date).toLocaleDateString()}`;
-        bookingsContainer.appendChild(li);
-      });
-    } catch(err) {
-      console.error("Error loading bookings", err);
-    }
-  }
+// Event listener for booking form submission (simulate API post)
+document.getElementById('booking-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const destination = document.getElementById('destination').value;
+  const date = document.getElementById('date').value;
+  const passengers = document.getElementById('passengers').value;
+  const bookingData = { destination, date, passengers };
 
-  // Simple countdown timer based on the next upcoming trip
-  async function startCountdown() {
-    try {
-      const trips = await fetchData("/api/trips");
-      // Find the next upcoming trip (for demo, pick the first one)
-      if (trips.length === 0) return;
-      const nextTrip = trips[0];
-      const countdownEl = document.getElementById("countdown");
-  
-      const updateTimer = () => {
-        const now = new Date();
-        const departure = new Date(nextTrip.departure_time);
-        const diff = departure - now;
-  
-        if(diff <= 0) {
-          countdownEl.textContent = "Launched!";
-          return;
-        }
-  
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  
-        countdownEl.textContent = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-      };
-  
-      updateTimer();
-      setInterval(updateTimer, 1000);
-    } catch(err) {
-      console.error("Error initializing countdown", err);
-    }
+  try {
+    const response = await fetch(`${API_BASE}/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bookingData)
+    });
+    const result = await response.json();
+    alert(result.message || 'Booking confirmed!');
+  } catch (error) {
+    console.error('Error confirming booking', error);
+    alert('There was an error processing your booking.');
   }
+});
 
-  // Fake AI travel tips (in a real app, this might come from an AI service)
-  function loadTravelTips() {
-    const tips = [
-      "Experience luxury like never before.",
-      "Don’t forget to try our zero-g spa treatments.",
-      "Capture your memories among the stars.",
-      "Explore the cosmos with style and comfort."
-    ];
-    const tip = tips[Math.floor(Math.random() * tips.length)];
-    document.getElementById("travelTips").textContent = tip;
-  }
-  
-  // Initial load
+// Initialize the frontend
+document.addEventListener('DOMContentLoaded', () => {
   loadTrips();
-  loadBookings();
-  startCountdown();
-  loadTravelTips();
+  displayTravelTips();
+
+  // Set countdown to a fixed future date for demonstration (e.g., 7 days from now)
+  let futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 7);
+  startCountdown(futureDate.getTime());
 });

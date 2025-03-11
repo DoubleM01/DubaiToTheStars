@@ -1,207 +1,199 @@
-/* Global Styles */
+/* Global styles and typography */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background: #000;
-  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #121212;
+  color: #f0f0f0;
   line-height: 1.6;
 }
 
-/* Navigation */
-header {
+.nav-list {
+  display: flex;
+  justify-content: center;
   background: rgba(0, 0, 0, 0.8);
-  padding: 1rem 2rem;
-  position: fixed;
+  list-style: none;
+  padding: 10px 0;
+  position: sticky;
   top: 0;
-  width: 100%;
   z-index: 100;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.nav-list li {
+  margin: 0 15px;
 }
 
-nav h1 {
-  font-size: 2rem;
-  color: #FFD700; /* Gold hint */
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-}
-
-nav ul li {
-  margin-left: 2rem;
-}
-
-nav ul li a {
-  color: #fff;
+.nav-list a {
   text-decoration: none;
-  transition: color 0.3s;
+  color: #c5a880;
+  transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
-  color: #FFD700;
+.nav-list a:hover {
+  color: #ffd700;
 }
 
 /* Hero Section */
-#hero {
+.hero {
   height: 100vh;
-  background: url('https://via.placeholder.com/1920x1080?text=Dubai+Skyline+in+Space') no-repeat center center/cover;
+  background: url('Hero Background') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   position: relative;
-  margin-top: 80px;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .hero-content {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 2rem;
-  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
 }
 
-.hero-content h2 {
+.hero h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+  color: #ffd700;
 }
 
-.hero-button {
-  padding: 1rem 2rem;
-  background: #FFD700;
-  color: #000;
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(45deg, #c5a880, #ffd700);
+  border: none;
+  padding: 15px 25px;
+  border-radius: 50px;
+  color: #121212;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+}
+
+/* Sections */
+.section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+/* Form styles */
+form {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+form input, form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
   border: none;
   border-radius: 5px;
-  text-decoration: none;
-  transition: background 0.3s;
 }
 
-.hero-button:hover {
-  background: #FFC300;
-}
-
-/* Booking Section */
-#booking {
-  padding: 4rem 2rem;
-  background: #111;
-}
-
-#booking h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.form-group label {
-  margin-bottom: 0.5rem;
-}
-
-.form-group input,
-.form-group select {
-  padding: 0.75rem;
-  border: none;
-  border-radius: 4px;
-}
-
-/* Schedule Section */
-#schedule {
-  padding: 4rem 2rem;
-  background: #222;
-}
-
-#schedule h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-}
-
-#schedules {
+/* Schedule Cards */
+.schedule-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
   justify-content: center;
+  gap: 20px;
 }
 
 .schedule-card {
-  background: #333;
-  padding: 1.5rem;
+  background: #1e1e1e;
+  padding: 20px;
   border-radius: 10px;
-  width: 300px;
-  transition: transform 0.3s;
+  width: 280px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .schedule-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* Dashboard Section */
-#dashboard {
-  padding: 4rem 2rem;
-  background: #111;
-}
-
-#dashboard h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-}
-
-.dashboard-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.card {
-  background: #222;
-  padding: 1.5rem;
-  width: 300px;
+/* Countdown Timer */
+.countdown {
+  margin: 20px auto;
+  max-width: 400px;
+  background: #1e1e1e;
+  padding: 20px;
   border-radius: 10px;
-  text-align: center;
+  animation: fadeIn 2s ease-in-out;
 }
 
-#countdown {
+#timer {
   font-size: 2rem;
-  margin-top: 1rem;
+  margin-top: 10px;
+  color: #ffd700;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 1rem;
-  background: #000;
-  border-top: 1px solid #333;
-  margin-top: 2rem;
+/* Travel Tips Section */
+.travel-tips {
+  margin-top: 40px;
+}
+
+.travel-tips ul {
+  list-style: none;
+  padding: 0;
+}
+
+.travel-tips li {
+  background: #1e1e1e;
+  padding: 10px;
+  margin: 8px auto;
+  max-width: 500px;
+  border-radius: 5px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 /* Responsive Design */
-@media(max-width: 768px) {
-  nav ul {
+@media (max-width: 768px) {
+  .nav-list {
     flex-direction: column;
-    gap: 1rem;
   }
-
-  .dashboard-cards {
+  .schedule-cards {
     flex-direction: column;
     align-items: center;
   }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
