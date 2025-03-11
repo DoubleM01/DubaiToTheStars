@@ -29,7 +29,6 @@
         </div>
       </section>
     </header>
-
     <main>
       <section id="booking" class="section">
         <h2>Trip Booking</h2>
@@ -40,14 +39,14 @@
           </div>
           <div class="form-group">
             <label for="departure-date">Departure Date</label>
-            <!-- The departure date options will be populated from available trips -->
+            <!-- The departure date options will be populated from trips.json -->
             <select id="departure-date" name="departure-date" required>
               <option value="">Select a departure date</option>
             </select>
           </div>
           <div class="form-group">
             <label for="package-select">Select Package</label>
-            <!-- Package options will be populated from pricing details -->
+            <!-- Package options will be populated from fixed list -->
             <select id="package-select" name="package-select" required>
               <option value="">Select a package</option>
             </select>
@@ -57,14 +56,12 @@
           </button>
         </form>
       </section>
-
       <section id="schedule" class="section">
         <h2>Available Trips</h2>
         <div class="schedule-cards" id="schedule-cards">
           <!-- Trips will be populated here -->
         </div>
       </section>
-
       <section id="dashboard" class="section">
         <h2>Dashboard</h2>
         <!-- The countdown timer will update with the selected departure date -->
@@ -82,11 +79,9 @@
         </div>
       </section>
     </main>
-
     <footer>
       <p>&copy; 2025 Dubai to the Stars. All rights reserved.</p>
     </footer>
-
     <script src="script.js"></script>
   </body>
 </html>
