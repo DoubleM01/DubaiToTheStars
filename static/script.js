@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Populate departure dates and package options from API endpoints.
+  // Populate departure dates and package options
   populateDepartureDates();
   populatePackages();
+  populateSchedule();
   displayTravelTips();
 
-  // Booking form submission simulation
+  // Booking form submission
   document
     .getElementById("booking-form")
     .addEventListener("submit", (e) => {
@@ -19,7 +20,9 @@ function populateDepartureDates() {
     .then((response) => response.json())
     .then((data) => {
       const departureSelect = document.getElementById("departure-date");
-      // Assuming data.trips is an array of trip objects with a 'departure' property.
+      // Clear current options except the default one.
+      departureSelect.innerHTML =
+        '<option value="">Select a departure date</option>';
       data.trips.forEach((trip) => {
         const option = document.createElement("option");
         option.value = trip.departure;
@@ -30,28 +33,47 @@ function populateDepartureDates() {
     .catch((err) => console.error(err));
 }
 
-// Fetch available packages (pricing details) to populate package selection.
+// Populate package options
 function populatePackages() {
-  fetch("/api/pricing")
-    .then((response) => response.json())
-    .then((data) => {
-      const packageSelect = document.getElementById("package-select");
-      // The pricing endpoint returns an object with packages
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          const option = document.createElement("option");
-          // Format the text for the package option
-          option.value = key;
-          option.innerText = `${capitalize(key.replace("_", " "))}: ${data[key].description}`;
-          packageSelect.appendChild(option);
-        }
-      }
-    })
-    .catch((err) => console.error(err));
+  // Fixed packages list matching the pricing endpoint
+  const packages = [
+    { id: "luxury_cabin", name: "Luxury Cabins" },
+    { id: "economy_shuttle", name: "Economy Shuttles" },
+    { id: "vip_zero_gravity", name: "VIP Zero-Gravity Experiences" },
+  ];
+
+  const packageSelect = document.getElementById("package-select");
+  // Clear current options except the default one.
+  packageSelect.innerHTML =
+    '<option value="">Select a package</option>';
+
+  packages.forEach((pack) => {
+    const option = document.createElement("option");
+    option.value = pack.id;
+    option.innerText = pack.name;
+    packageSelect.appendChild(option);
+  });
 }
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+// Populate schedule section with available trips.
+function populateSchedule() {
+  fetch("/api/trips")
+    .then((response) => response.json())
+    .then((data) => {
+      const scheduleCards = document.getElementById("schedule-cards");
+      scheduleCards.innerHTML = "";
+      data.trips.forEach((trip) => {
+        const card = document.createElement("div");
+        card.className = "schedule-card";
+        card.innerHTML = `
+          <h3>${trip.destination}</h3>
+          <p>Departure: ${trip.departure}</p>
+          <p>Duration: ${trip.duration}</p>
+        `;
+        scheduleCards.appendChild(card);
+      });
+    })
+    .catch((err) => console.error(err));
 }
 
 // Display AI-based travel tips (using a basic array)
@@ -64,6 +86,7 @@ function displayTravelTips() {
   ];
 
   const tipsList = document.getElementById("tips-list");
+  tipsList.innerHTML = "";
   tips.forEach((tip) => {
     const li = document.createElement("li");
     li.innerText = tip;
@@ -71,7 +94,7 @@ function displayTravelTips() {
   });
 }
 
-// Handle the booking process: generate PDF ticket and update countdown timer.
+// Handle the booking process: update countdown timer and generate a PDF ticket.
 function handleBooking() {
   const userName = document.getElementById("user-name").value;
   const departureDate = document.getElementById("departure-date").value;
@@ -84,7 +107,7 @@ function handleBooking() {
 
   alert("Your booking has been confirmed! Safe travels beyond the stars.");
 
-  // Update countdown timer to the selected departure date.
+  // Update countdown timer with the selected departure date.
   startCountdown(new Date(departureDate));
 
   // Generate PDF boarding pass ticket.
@@ -115,7 +138,7 @@ function startCountdown(targetDate) {
       minutes < 10 ? "0" + minutes : minutes;
     document.getElementById("seconds").innerText =
       seconds < 10 ? "0" + seconds : seconds;
-    // If countdown finished, clear timer.
+
     if (distance < 0) {
       clearInterval(window.countdownTimer);
       document.getElementById("countdown").innerText = "DEPARTED";
@@ -139,13 +162,29 @@ function generateTicketPDF(userName, departureDate, selectedPackage) {
   doc.setFontSize(16);
   doc.text(`Passenger: ${userName}`, 20, 45);
   doc.text(`Departure: ${departureDate}`, 20, 60);
-  doc.text(`Package: ${capitalize(selectedPackage.replace("_", " "))}`, 20, 75);
+
+  // Format package name for display.
+  let packageName = "";
+  switch (selectedPackage) {
+    case "luxury_cabin":
+      packageName = "Luxury Cabins";
+      break;
+    case "economy_shuttle":
+      packageName = "Economy Shuttles";
+      break;
+    case "vip_zero_gravity":
+      packageName = "VIP Zero-Gravity Experiences";
+      break;
+    default:
+      packageName = selectedPackage;
+  }
+  doc.text(`Package: ${packageName}`, 20, 75);
 
   // Add design lines for style
   doc.setDrawColor(212, 175, 55);
   doc.line(150, 10, 150, 90);
 
-  // Add flight details on the right side
+  // Add additional flight details on the right side
   doc.setFontSize(14);
   doc.text("Dubai to the Stars", 160, 30);
   doc.text("Gate: A12", 160, 45);
