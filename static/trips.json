@@ -1,0 +1,40 @@
+{
+  "trips": [
+    {
+      "id": 1,
+      "destination": "Dubai Orbit",
+      "departure": "2025-04-15",
+      "duration": "7 days"
+    },
+    {
+      "id": 2,
+      "destination": "Mars Expedition",
+      "departure": "2025-05-20",
+      "duration": "15 days"
+    },
+    {
+      "id": 3,
+      "destination": "Lunar Escape",
+      "departure": "2025-06-10",
+      "duration": "10 days"
+    },
+    {
+      "id": 4,
+      "destination": "Venus Voyage",
+      "departure": "2025-07-05",
+      "duration": "12 days"
+    },
+    {
+      "id": 5,
+      "destination": "Jupiter Journey",
+      "departure": "2025-08-15",
+      "duration": "20 days"
+    },
+    {
+      "id": 6,
+      "destination": "Saturn Sojourn",
+      "departure": "2025-09-10",
+      "duration": "18 days"
+    }
+  ]
+}
