@@ -13,7 +13,7 @@
       <nav class="navbar">
         <ul>
           <li><a href="#booking">Booking</a></li>
-          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#schedule">Available Trips</a></li>
           <li><a href="#dashboard">Dashboard</a></li>
         </ul>
       </nav>
@@ -47,7 +47,7 @@
           </div>
           <div class="form-group">
             <label for="package-select">Select Package</label>
-            <!-- Package options (from pricing) will be populated dynamically -->
+            <!-- Package options will be populated from pricing details -->
             <select id="package-select" name="package-select" required>
               <option value="">Select a package</option>
             </select>
@@ -59,24 +59,9 @@
       </section>
 
       <section id="schedule" class="section">
-        <h2>Schedule</h2>
-        <div class="schedule-cards">
-          <div class="schedule-card">
-            <h3>Luxury Cabin</h3>
-            <p>
-              Experience premium comfort in our state-of-the-art cabins.
-            </p>
-          </div>
-          <div class="schedule-card">
-            <h3>Economy Shuttle</h3>
-            <p>Affordable travel with all the essentials.</p>
-          </div>
-          <div class="schedule-card">
-            <h3>VIP Zero-Gravity</h3>
-            <p>
-              Enjoy a once-in-a-lifetime experience in zero gravity.
-            </p>
-          </div>
+        <h2>Available Trips</h2>
+        <div class="schedule-cards" id="schedule-cards">
+          <!-- Trips will be populated here -->
         </div>
       </section>
 
