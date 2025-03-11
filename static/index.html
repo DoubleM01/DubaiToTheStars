@@ -1,93 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dubai to the Stars</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <nav class="navbar">
-      <ul>
-        <li><a href="#booking">Booking</a></li>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-      </ul>
-    </nav>
-    <section class="hero">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <h1>Dubai to the Stars</h1>
-        <p>Experience the ultimate interstellar adventure inspired by the spirit of Dubai.</p>
-        <a href="#booking" class="btn">Book Your Journey</a>
-      </div>
-    </section>
-  </header>
-
-  <main>
-    <section id="booking" class="section">
-      <h2>Trip Booking</h2>
-      <form id="booking-form">
-        <div class="form-group">
-          <label for="destination">Destination</label>
-          <select id="destination" name="destination">
-            <option value="dubai">Dubai Orbit</option>
-            <option value="mars">Mars Expedition</option>
-            <option value="moon">Lunar Escape</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="departure-date">Departure Date</label>
-          <input type="date" id="departure-date" name="departure-date" required>
-        </div>
-        <div class="form-group">
-          <label for="passengers">Number of Passengers</label>
-          <input type="number" id="passengers" name="passengers" min="1" max="10" required>
-        </div>
-        <button type="submit" class="btn booking-btn">Confirm Booking</button>
-      </form>
-    </section>
-    
-    <section id="schedule" class="section">
-      <h2>Schedule</h2>
-      <div class="schedule-cards">
-        <div class="schedule-card">
-          <h3>Luxury Cabin</h3>
-          <p>Experience premium comfort in our state-of-the-art cabins.</p>
-        </div>
-        <div class="schedule-card">
-          <h3>Economy Shuttle</h3>
-          <p>Affordable travel with all the essentials.</p>
-        </div>
-        <div class="schedule-card">
-          <h3>VIP Zero-Gravity</h3>
-          <p>Enjoy a once-in-a-lifetime experience in zero gravity.</p>
-        </div>
-      </div>
-    </section>
-    
-    <section id="dashboard" class="section">
-      <h2>Dashboard</h2>
-      <div class="countdown-timer" id="countdown">
-        <span id="days">00</span>d :
-        <span id="hours">00</span>h :
-        <span id="minutes">00</span>m :
-        <span id="seconds">00</span>s
-      </div>
-      <div class="travel-tips">
-        <h3>Travel Tips</h3>
-        <ul id="tips-list">
-          <!-- AI-based travel tips will be injected here -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dubai to the Stars</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Include jsPDF library from CDN to generate PDF tickets -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li><a href="#booking">Booking</a></li>
+          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#dashboard">Dashboard</a></li>
         </ul>
-      </div>
-    </section>
-  </main>
+      </nav>
+      <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>Dubai to the Stars</h1>
+          <p>
+            Experience the ultimate interstellar adventure inspired by the
+            spirit of Dubai.
+          </p>
+          <a href="#booking" class="btn">Book Your Journey</a>
+        </div>
+      </section>
+    </header>
 
-  <footer>
-    <p>&copy; 2025 Dubai to the Stars. All rights reserved.</p>
-  </footer>
+    <main>
+      <section id="booking" class="section">
+        <h2>Trip Booking</h2>
+        <form id="booking-form">
+          <div class="form-group">
+            <label for="user-name">Your Name</label>
+            <input type="text" id="user-name" name="user-name" required />
+          </div>
+          <div class="form-group">
+            <label for="departure-date">Departure Date</label>
+            <!-- The departure date options will be populated from available trips -->
+            <select id="departure-date" name="departure-date" required>
+              <option value="">Select a departure date</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="package-select">Select Package</label>
+            <!-- Package options (from pricing) will be populated dynamically -->
+            <select id="package-select" name="package-select" required>
+              <option value="">Select a package</option>
+            </select>
+          </div>
+          <button type="submit" class="btn booking-btn">
+            Confirm Booking
+          </button>
+        </form>
+      </section>
 
-  <script src="script.js"></script>
-</body>
+      <section id="schedule" class="section">
+        <h2>Schedule</h2>
+        <div class="schedule-cards">
+          <div class="schedule-card">
+            <h3>Luxury Cabin</h3>
+            <p>
+              Experience premium comfort in our state-of-the-art cabins.
+            </p>
+          </div>
+          <div class="schedule-card">
+            <h3>Economy Shuttle</h3>
+            <p>Affordable travel with all the essentials.</p>
+          </div>
+          <div class="schedule-card">
+            <h3>VIP Zero-Gravity</h3>
+            <p>
+              Enjoy a once-in-a-lifetime experience in zero gravity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="section">
+        <h2>Dashboard</h2>
+        <!-- The countdown timer will update with the selected departure date -->
+        <div class="countdown-timer" id="countdown">
+          <span id="days">00</span>d :
+          <span id="hours">00</span>h :
+          <span id="minutes">00</span>m :
+          <span id="seconds">00</span>s
+        </div>
+        <div class="travel-tips">
+          <h3>Travel Tips</h3>
+          <ul id="tips-list">
+            <!-- AI-based travel tips will be injected here -->
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Dubai to the Stars. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
 </html>
