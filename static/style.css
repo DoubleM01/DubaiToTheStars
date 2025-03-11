@@ -1,4 +1,4 @@
-/* Global styles and typography */
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -6,49 +6,55 @@
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: #121212;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111;
   color: #f0f0f0;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-.nav-list {
-  display: flex;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  list-style: none;
-  padding: 10px 0;
-  position: sticky;
+/* Navbar */
+.navbar {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 100;
 }
 
-.nav-list li {
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.navbar li {
   margin: 0 15px;
 }
 
-.nav-list a {
+.navbar a {
+  color: #d4af37;
   text-decoration: none;
-  color: #c5a880;
+  font-weight: bold;
   transition: color 0.3s ease;
 }
 
-.nav-list a:hover {
-  color: #ffd700;
+.navbar a:hover {
+  color: #fff;
 }
 
 /* Hero Section */
 .hero {
+  position: relative;
   height: 100vh;
-  background: url('Hero Background') center/cover no-repeat;
+  background: url('https://www.nasa.gov/wp-content/uploads/2023/03/635662main_dubai_full.jpg?w=1041') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
-.hero::after {
-  content: '';
+.hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -60,64 +66,102 @@ body {
 .hero-content {
   position: relative;
   text-align: center;
-  z-index: 1;
+  color: #fff;
+  animation: fadeIn 2s ease-out;
 }
 
-.hero h1 {
-  font-size: 3rem;
+.hero-content h1 {
+  font-size: 4rem;
   margin-bottom: 20px;
-  color: #ffd700;
 }
 
-.hero p {
+.hero-content p {
   font-size: 1.5rem;
   margin-bottom: 30px;
 }
 
-/* Buttons */
 .btn {
-  background: linear-gradient(45deg, #c5a880, #ffd700);
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(45deg, #d4af37, #ffd700);
+  color: #111;
   border: none;
-  padding: 15px 25px;
-  border-radius: 50px;
-  color: #121212;
-  font-weight: bold;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.6);
 }
 
 /* Sections */
 .section {
-  padding: 60px 20px;
-  text-align: center;
+  padding: 80px 20px;
+  margin-top: 70px;
 }
 
-/* Form styles */
-form {
+.section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+}
+
+/* Booking Form */
+#booking-form {
   max-width: 500px;
   margin: 0 auto;
-  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
 
-form label {
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
   display: block;
-  margin-bottom: 5px;
-  margin-top: 15px;
-  font-weight: bold;
+  margin-bottom: 8px;
+  color: #d4af37;
 }
 
-form input, form select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  border: 2px solid #d4af37;
+  border-radius: 5px;
+  background: #222;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ffd700;
+}
+
+/* Booking Button */
+.booking-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  background: linear-gradient(45deg, #ffd700, #d4af37);
   border: none;
   border-radius: 5px;
+  color: #111;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.booking-btn:hover {
+  background: linear-gradient(45deg, #d4af37, #ffd700);
+  transform: scale(1.02);
 }
 
 /* Schedule Cards */
@@ -129,71 +173,68 @@ form input, form select {
 }
 
 .schedule-card {
-  background: #1e1e1e;
-  padding: 20px;
+  background: #222;
+  border: 2px solid #d4af37;
   border-radius: 10px;
-  width: 280px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .schedule-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 10px 20px rgba(212, 175, 55, 0.4);
 }
 
-/* Countdown Timer */
-.countdown {
-  margin: 20px auto;
-  max-width: 400px;
-  background: #1e1e1e;
-  padding: 20px;
-  border-radius: 10px;
-  animation: fadeIn 2s ease-in-out;
-}
-
-#timer {
+/* Dashboard */
+.countdown-timer {
   font-size: 2rem;
-  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+}
+
+.travel-tips {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.travel-tips h3 {
+  text-align: center;
+  margin-bottom: 20px;
   color: #ffd700;
 }
 
-/* Travel Tips Section */
-.travel-tips {
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #000;
   margin-top: 40px;
 }
 
-.travel-tips ul {
-  list-style: none;
-  padding: 0;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.travel-tips li {
-  background: #1e1e1e;
-  padding: 10px;
-  margin: 8px auto;
-  max-width: 500px;
-  border-radius: 5px;
-}
-
-/* Smooth scrolling */
+/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .nav-list {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  .navbar ul {
     flex-direction: column;
   }
   .schedule-cards {
     flex-direction: column;
     align-items: center;
   }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
 }

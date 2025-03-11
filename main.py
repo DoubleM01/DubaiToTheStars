@@ -1,18 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Optional
+from pathlib import Path
 import json
-import uvicorn
-import os
 
 app = FastAPI(title="Dubai to the Stars API")
 
-# Mount static files (HTML, CSS, JS)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Enable CORS if needed for frontend access
+# Allow CORS for local development/testing
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,71 +15,63 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define Pydantic models
-class Trip(BaseModel):
-    id: int
-    destination: str
-    date: str
-    price: str
+# Mount the "static" directory to serve frontend files
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
-class Booking(BaseModel):
-    id: Optional[int] = None
-    destination: str
-    date: str
-    passengers: int
-
-class Accommodation(BaseModel):
-    id: int
-    name: str
-    location: str
-    price: str
-
-# File paths for persistence
-TRIPS_FILE = "trips.json"
-BOOKINGS_FILE = "bookings.json"
-ACCOMMODATIONS_FILE = "accommodations.json"
-
-# Helper functions to load and save JSON data
-def load_data(file_path):
-    if not os.path.exists(file_path):
-        return []
-    with open(file_path, "r") as f:
+def load_json(filename: str):
+    file_path = Path(filename)
+    if not file_path.exists():
+        return {}
+    with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_data(file_path, data):
-    with open(file_path, "w") as f:
-        json.dump(data, f, indent=4)
-
-# API Endpoints
-
-@app.get("/api/trips", response_model=List[Trip])
+@app.get("/api/trips")
 def get_trips():
-    trips = load_data(TRIPS_FILE)
+    trips = load_json("trips.json")
+    if not trips:
+        raise HTTPException(status_code=404, detail="Trips data not found")
     return trips
 
-@app.post("/api/bookings")
-def create_booking(booking: Booking):
-    bookings = load_data(BOOKINGS_FILE)
-    new_id = bookings[-1]["id"] + 1 if bookings else 1
-    booking.id = new_id
-    bookings.append(booking.dict())
-    save_data(BOOKINGS_FILE, bookings)
-    return {"message": "Booking confirmed!", "booking": booking.dict()}
+@app.get("/api/bookings")
+def get_bookings():
+    bookings = load_json("bookings.json")
+    if not bookings:
+        # Return empty list if no bookings exist yet
+        return []
+    return bookings
 
 @app.get("/api/pricing")
 def get_pricing():
-    # Static pricing data for demonstration
-    pricing_data = {
-        "moon": "$250,000",
-        "mars": "$500,000",
-        "jupiter": "$750,000"
+    # Sample pricing and package details
+    pricing = {
+        "luxury_cabin": {
+            "price": 5000,
+            "description": "Premium comfort with exclusive services."
+        },
+        "economy_shuttle": {
+            "price": 1500,
+            "description": "Affordable travel with all essential amenities."
+        },
+        "vip_zero_gravity": {
+            "price": 10000,
+            "description": "Exclusive zero-gravity experience with personalized service."
+        }
     }
-    return pricing_data
+    return pricing
 
-@app.get("/api/accommodations", response_model=List[Accommodation])
+@app.get("/api/accommodations")
 def get_accommodations():
-    accommodations = load_data(ACCOMMODATIONS_FILE)
+    accommodations = load_json("accommodations.json")
+    if not accommodations:
+        raise HTTPException(status_code=404, detail="Accommodations data not found")
     return accommodations
 
+# For real-time update simulation (e.g., countdown timer, schedule updates)
+@app.get("/api/updates")
+def get_updates():
+    # This endpoint could be enhanced to push real time updates. For now, it returns a simple message.
+    return {"message": "Real-time updates will be provided here."}
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

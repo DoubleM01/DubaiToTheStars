@@ -1,20 +1,22 @@
-[
+{
+  "trips": [
     {
-        "id": 1,
-        "destination": "Moon",
-        "date": "2025-04-01",
-        "price": "$250,000"
+      "id": 1,
+      "destination": "Dubai Orbit",
+      "departure": "2025-04-15",
+      "duration": "7 days"
     },
     {
-        "id": 2,
-        "destination": "Mars",
-        "date": "2025-05-15",
-        "price": "$500,000"
+      "id": 2,
+      "destination": "Mars Expedition",
+      "departure": "2025-05-20",
+      "duration": "15 days"
     },
     {
-        "id": 3,
-        "destination": "Jupiter",
-        "date": "2025-06-20",
-        "price": "$750,000"
+      "id": 3,
+      "destination": "Lunar Escape",
+      "departure": "2025-06-10",
+      "duration": "10 days"
     }
-]
+  ]
+}

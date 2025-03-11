@@ -1,14 +1,16 @@
-[
+{
+  "accommodations": [
     {
-        "id": 1,
-        "name": "Celestial Suites",
-        "location": "Lunar Base",
-        "price": "$1,000 per night"
+      "id": 1,
+      "name": "Dubai Lunar Suite",
+      "description": "A spacious suite inspired by Dubai's modern luxury and cultural heritage.",
+      "amenities": ["Wi-Fi", "View of Earth", "Complimentary Shuttle"]
     },
     {
-        "id": 2,
-        "name": "Mars Habitat",
-        "location": "Mars Colony",
-        "price": "$1,500 per night"
+      "id": 2,
+      "name": "Starlight Economy Room",
+      "description": "Cozy and affordable, offering essential comforts for your space journey.",
+      "amenities": ["Basic Wi-Fi", "Shared Lounge"]
     }
-]
+  ]
+}

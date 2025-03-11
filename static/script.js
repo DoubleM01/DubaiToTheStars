@@ -1,96 +1,76 @@
-// Simulated API endpoints
-const API_BASE = '/api';
+document.addEventListener('DOMContentLoaded', () => {
+  // Fetch trip data, bookings, and schedules (simulated API calls)
+  fetchData();
+  initCountdown();
+  displayTravelTips();
+  
+  // Booking form submission simulation
+  document.getElementById('booking-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Your booking has been confirmed! Safe travels beyond the stars.');
+  });
+});
 
-// Sample AI-based travel tips array
-const travelTips = [
-  "Pack light but smart – space suits can be bulky!",
-  "Don’t forget to hydrate; space travel can dehydrate you fast.",
-  "Experience the beauty of the cosmos – look for constellations.",
-  "Keep your travel documents in a secure, anti-gravity safe."
-];
+function fetchData() {
+  // Simulated fetch calls for trips, bookings, and pricing
+  fetch('/api/trips')
+    .then(response => response.json())
+    .then(data => console.log('Trips:', data))
+    .catch(err => console.error(err));
 
-// Function to fetch trips data and populate schedule cards
-async function loadTrips() {
-  try {
-    const response = await fetch(`${API_BASE}/trips`);
-    const trips = await response.json();
-    const scheduleContainer = document.querySelector('.schedule-cards');
-    scheduleContainer.innerHTML = '';
-    trips.forEach(trip => {
-      const card = document.createElement('div');
-      card.className = 'schedule-card';
-      card.innerHTML = `
-        <h3>${trip.destination} Trip</h3>
-        <p>Date: ${trip.date}</p>
-        <p>Price: ${trip.price}</p>
-      `;
-      scheduleContainer.appendChild(card);
-    });
-  } catch (error) {
-    console.error('Error fetching trips data', error);
-  }
+  fetch('/api/bookings')
+    .then(response => response.json())
+    .then(data => console.log('Bookings:', data))
+    .catch(err => console.error(err));
+
+  fetch('/api/pricing')
+    .then(response => response.json())
+    .then(data => console.log('Pricing:', data))
+    .catch(err => console.error(err));
 }
 
-// Function to simulate countdown timer for the next trip
-function startCountdown(endTime) {
-  const timerElement = document.getElementById('timer');
-  const countdown = setInterval(() => {
+// Countdown Timer Logic (set to a sample future date)
+function initCountdown() {
+  // Set the countdown target date
+  const countdownDate = new Date().getTime() + (10 * 24 * 60 * 60 * 1000); // 10 days from now
+
+  const timer = setInterval(() => {
     const now = new Date().getTime();
-    const distance = endTime - now;
+    const distance = countdownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Update HTML
+    document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+    document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+    document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+    document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+
+    // If countdown is finished
     if (distance < 0) {
-      clearInterval(countdown);
-      timerElement.innerHTML = "Trip Started!";
-      return;
+      clearInterval(timer);
+      document.getElementById('countdown').innerText = "LAUNCHED";
     }
-    const days = Math.floor(distance/(1000*60*60*24));
-    const hours = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
-    const minutes = Math.floor((distance % (1000*60*60))/(1000*60));
-    const seconds = Math.floor((distance % (1000*60))/1000);
-    timerElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
   }, 1000);
 }
 
-// Function to display travel tips
+// Display AI-based travel tips (using a basic array)
 function displayTravelTips() {
+  const tips = [
+    "Travel light but bring your adventurous spirit.",
+    "Embrace the futuristic vibe and enjoy every moment.",
+    "Remember to capture the beauty of space and Dubai's elegance.",
+    "Stay curious and explore new horizons."
+  ];
+  
   const tipsList = document.getElementById('tips-list');
-  travelTips.forEach(tip => {
+  tips.forEach(tip => {
     const li = document.createElement('li');
-    li.textContent = tip;
+    li.innerText = tip;
     tipsList.appendChild(li);
   });
 }
-
-// Event listener for booking form submission (simulate API post)
-document.getElementById('booking-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const destination = document.getElementById('destination').value;
-  const date = document.getElementById('date').value;
-  const passengers = document.getElementById('passengers').value;
-  const bookingData = { destination, date, passengers };
-
-  try {
-    const response = await fetch(`${API_BASE}/bookings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(bookingData)
-    });
-    const result = await response.json();
-    alert(result.message || 'Booking confirmed!');
-  } catch (error) {
-    console.error('Error confirming booking', error);
-    alert('There was an error processing your booking.');
-  }
-});
-
-// Initialize the frontend
-document.addEventListener('DOMContentLoaded', () => {
-  loadTrips();
-  displayTravelTips();
-
-  // Set countdown to a fixed future date for demonstration (e.g., 7 days from now)
-  let futureDate = new Date();
-  futureDate.setDate(futureDate.getDate() + 7);
-  startCountdown(futureDate.getTime());
-});
